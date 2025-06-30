@@ -44,14 +44,14 @@ export class HttpInterceptorsService implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-   
-    if (request.url.startsWith("https://maps.google.com/maps/api/geocode/json")) {
+    
+    if (
+      request.url.startsWith("https://maps.google.com/maps/api/geocode/json") ||
+      request.url.startsWith("https://maps.googleapis.com/maps/api/geocode/json") ||
+      request.url.includes("/api/ShareLocation/GetLastLocation")
+    ) {
       return next.handle(request);
     }
-    if (request.url.startsWith("https://maps.googleapis.com/maps/api/geocode/json")) {
-      return next.handle(request);
-    }
-
 
     if (this.tokenService.getToken()) {
       return next
@@ -67,14 +67,17 @@ export class HttpInterceptorsService implements HttpInterceptor {
             if (this.invalidTokenError(error)) {
               this.sessionService.redirectToLogin(this.router.url);
             }
-            if (this.unAuthorizedError(error)){
+            if (this.unAuthorizedError(error)) {
               this.sessionService.redirectToLogin(this.router.url);
             }
             return throwError(error);
           })
         );
     } else {
-      this.router.navigateByUrl('/login')
+       const currentUrl = window.location.pathname;
+  if (!currentUrl.startsWith('/ot/')) {
+    this.router.navigateByUrl('/login');
+  }
     }
 
     return next.handle(request);

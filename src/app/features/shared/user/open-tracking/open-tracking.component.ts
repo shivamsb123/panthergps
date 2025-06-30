@@ -59,43 +59,89 @@ export class OpenTrackingComponent  implements OnInit, AfterViewInit, OnDestroy{
     }
 
     const eventData = element?.body?.Result?.Data;
+    // if (eventData) {
+
+    //   const content = `<b> Vehicle No: </b> ${eventData.Device.VehicleNo}  <br/> <b> Last Update: </b> ${this.datePipe.transform(eventData?.Eventdata?.Timestamp, 'yyyy-MM-dd HH:mm:ss')} <br/> <b> Speed: </b> ${eventData?.Eventdata?.Speed} Km/h <br/> `;
+    //   const customIcon = L.icon({
+    //     iconUrl: 'assets/drawable/rp_marker_marker_blue.png',
+    //     iconSize: [45, 90],
+    //   });
+    //   if (this.marker === null) {
+    //     this.marker = L.marker([eventData?.Eventdata.Latitude, eventData?.Eventdata?.Longitude],{ icon: customIcon });
+    //     this.marker.addTo(this.map);
+    //     var popup = L.popup().setContent(content);
+    //     this.marker.bindPopup(popup);
+    //   }
+    //   else {
+    //     this.marker.setLatLng([eventData?.Eventdata?.Latitude, eventData?.Eventdata?.Longitude]);
+    //     this.marker.getPopup().setContent(content);
+    //     this.marker.getPopup().update();
+    //   }
+
+    //   this.getAddress(eventData?.Eventdata);
+    //   this.addPointPolyline([eventData?.Eventdata.Latitude, eventData?.Eventdata?.Longitude]);
+
+    //   var latLngs = [this.marker.getLatLng()];
+    //   var markerBounds = L.latLngBounds(latLngs);
+    //   if (this.zoom === 0) {
+    //     this.map.fitBounds(markerBounds);
+    //     this.map.setZoom(16);
+
+    //     this.map.on("zoomend", () => {
+    //       this.zoom = this.map.getZoom();
+    //     });
+    //   }
+
+    //   if (!this.map.getBounds().contains([eventData?.Latitude, eventData?.Longitude])) {
+    //     this.map.panTo(this.marker.getLatLng());
+    //   }
+    // }
+
     if (eventData) {
+  const lat = eventData?.Eventdata?.Latitude;
+  const lng = eventData?.Eventdata?.Longitude;
 
-      const content = `<b> Vehicle No: </b> ${eventData.Device.VehicleNo}  <br/> <b> Last Update: </b> ${this.datePipe.transform(eventData?.Eventdata?.Timestamp, 'yyyy-MM-dd HH:mm:ss')} <br/> <b> Speed: </b> ${eventData?.Eventdata?.Speed} Km/h <br/> `;
-      const customIcon = L.icon({
-        iconUrl: 'assets/drawable/rp_marker_marker_blue.png',
-        iconSize: [45, 90],
-      });
-      if (this.marker === null) {
-        this.marker = L.marker([eventData?.Eventdata.Latitude, eventData?.Eventdata?.Longitude],{ icon: customIcon });
-        this.marker.addTo(this.map);
-        var popup = L.popup().setContent(content);
-        this.marker.bindPopup(popup);
-      }
-      else {
-        this.marker.setLatLng([eventData?.Eventdata.Latitude, eventData?.Eventdata?.Longitude]);
-        this.marker.getPopup().setContent(content);
-        this.marker.getPopup().update();
-      }
+  if (lat === undefined || lng === undefined || lat === null || lng === null) {
+    console.warn('Latitude or Longitude is missing:', eventData?.Eventdata);
+    return;
+  }
 
-      this.getAddress(eventData?.Eventdata);
-      this.addPointPolyline([eventData?.Eventdata.Latitude, eventData?.Eventdata?.Longitude]);
+  const content = `<b> Vehicle No: </b> ${eventData.Device.VehicleNo}  <br/> <b> Last Update: </b> ${this.datePipe.transform(eventData?.Eventdata?.Timestamp, 'yyyy-MM-dd HH:mm:ss')} <br/> <b> Speed: </b> ${eventData?.Eventdata?.Speed} Km/h <br/> `;
+  const customIcon = L.icon({
+    iconUrl: 'assets/drawable/rp_marker_marker_blue.png',
+    iconSize: [45, 90],
+  });
 
-      var latLngs = [this.marker.getLatLng()];
-      var markerBounds = L.latLngBounds(latLngs);
-      if (this.zoom === 0) {
-        this.map.fitBounds(markerBounds);
-        this.map.setZoom(16);
+  const latLng: [number, number] = [lat, lng];
 
-        this.map.on("zoomend", () => {
-          this.zoom = this.map.getZoom();
-        });
-      }
+  if (this.marker === null) {
+    this.marker = L.marker(latLng, { icon: customIcon });
+    this.marker.addTo(this.map);
+    var popup = L.popup().setContent(content);
+    this.marker.bindPopup(popup);
+  } else {
+    this.marker.setLatLng(latLng);
+    this.marker.getPopup().setContent(content);
+    this.marker.getPopup().update();
+  }
 
-      if (!this.map.getBounds().contains([eventData.Latitude, eventData.Longitude])) {
-        this.map.panTo(this.marker.getLatLng());
-      }
-    }
+  this.getAddress(eventData?.Eventdata);
+  this.addPointPolyline(latLng); // safe now
+
+  var latLngs = [this.marker.getLatLng()];
+  var markerBounds = L.latLngBounds(latLngs);
+  if (this.zoom === 0) {
+    this.map.fitBounds(markerBounds);
+    this.map.setZoom(16);
+    this.map.on("zoomend", () => {
+      this.zoom = this.map.getZoom();
+    });
+  }
+
+  if (!this.map.getBounds().contains(latLng)) {
+    this.map.panTo(latLng);
+  }
+}
   }
 
   addPointPolyline(point: any): void {
@@ -116,6 +162,8 @@ export class OpenTrackingComponent  implements OnInit, AfterViewInit, OnDestroy{
   getLocation(): void {
     this.userService.getVehicleLastPoint(this.key)
       .subscribe((d) => {
+        console.log('d 11234567',d);
+        
         this.addMarker(d);
       }, (e) => {
         this.NotificationService.showError(e?.error?.Error?.Data);
