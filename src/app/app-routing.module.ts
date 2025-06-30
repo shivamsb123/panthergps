@@ -21,7 +21,7 @@ const routes: Routes = [
     path:"login",
     component: LoginComponent
   },
-  { path: 'oT/:key', component: OpenTrackingComponent },
+  { path: 'ot/:key', component: OpenTrackingComponent },
   
   {
     path: "admin",
