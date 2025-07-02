@@ -1,0 +1,105 @@
+<app-loader *ngIf="spinnerLoading"></app-loader>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                Shared Location List
+            </div>
+            <div class="card-body">
+                <div class="fiter-data mb-3">
+                    <shared-location-filter (filterValue)="confirm($event)"
+                        (generateLocation)="generatelocation($event)"></shared-location-filter>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="datatable_wrapper" class="dataTables_wrapper no-footer">
+                            <div class="dataTables_scroll">
+                                <div class="dataTables_scrollBody">
+                                    <table id="datatable"
+                                        class="table table-striped nowrap dataTable no-footer dtr-inline" role="grid"
+                                        aria-describedby="datatable_info" style="width: 100%" width="100%">
+                                        <thead>
+                                            <tr role="row">
+                                                <th *ngFor="let vehicleHeading of columns">
+                                                    <strong>{{vehicleHeading?.title}}</strong>
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr *ngFor="let row of locationData |  paginate : {
+                                                      itemsPerPage: tableSize,
+                                                      currentPage: page,
+                                                      totalItems: count} let i= index"
+                                                [ngClass]="{'active': selectColor?.Id === row?.Id}">
+                                                <td>
+                                                    <a>{{ row?.vehicle_no }}</a>
+                                                </td>
+                                                <td>
+                                                    <a (mouseenter)="showCopyIcon = i" [href]="row?.share_url"
+                                                        target="_blank" style="cursor: pointer;"
+                                                        [ngStyle]="{'color': (showCopyIcon === i) ? 'red' : 'blue','display': (showCopyIcon === i) ? 'inline-flex' : '', 'gap': (showCopyIcon === i) ? '8px' : ''}"
+                                                        (mouseleave)="showCopyIcon = null">
+                                                        {{ row?.share_url }}
+                                                        <i *ngIf="showCopyIcon === i" 
+                                                            (click)="copyContent(row?.share_url, i); $event.stopPropagation(); $event.preventDefault();"
+                                                            class="fa-regular fa-copy cursor-pointer"
+                                                            [title]="copy == true && showCopyIcon === index ? 'Copied' : 'Copy'"></i>
+                                                    </a>
+                                                </td>
+                                                <!-- <td>
+                                                    <a>{{ row?.share_url }}</a>
+                                                </td> -->
+                                                <td>
+                                                    <a>{{ row?.creation_time | date : "dd/MM/yyyy" }}</a>
+                                                </td>
+                                                <td>
+                                                    <a>{{ row?.validity | date : "dd/MM/yyyy" }}</a>
+                                                </td>
+                                                <td>
+                                                    <span [ngClass]="getValidityStatusClass(row?.validity)"
+                                                        class="badge">
+                                                        {{ getValidityStatusText(row?.validity) }}
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <button mat-icon-button (click)="onContextMenu($event, row, i)">
+                                                        <mat-icon>more_vert</mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center"
+                                        *ngIf="locationData && locationData.length == 0 || locationData == null "
+                                        style="width: 100%;">No Data Available</div>
+                                </div>
+                                <div class="pagination-data" *ngIf="locationData && locationData?.length > 0">
+                                    <pagination-controls previousLabel="Prev" nextLabel="Next"
+                                        (pageChange)="onTableDataChange($event)">
+                                    </pagination-controls>
+                                </div>
+                            </div>
+                            <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
+                                [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu">
+                            </div>
+                            <mat-menu #contextMenu="matMenu">
+                                <ng-template matMenuContent let-item="item">
+                                    <button mat-menu-item *ngFor="let menuItem of urlPath"
+                                        (click)="redirectTo(menuItem?.path)">
+                                        {{ menuItem.name }}
+                                    </button>
+
+                                </ng-template>
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <router-outlet></router-outlet>
+    </div>
+</div>

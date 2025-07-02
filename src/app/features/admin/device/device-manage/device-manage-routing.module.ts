@@ -16,6 +16,8 @@ import { DeviceSummaryListComponent } from './component/device-summary/device-su
 import { AdminDeviceDetailComponent } from './component/admin-device-detail/admin-device-detail.component';
 import { DeviceCommandManageComponent } from './pages/device-command-manage/device-command-manage.component';
 import { AddDeviceCommandComponent } from './component/device-command/add-device-command/add-device-command.component';
+import { SharedLocationManageComponent } from './pages/shared-location-manage/shared-location-manage.component';
+import { GenerateLocationComponent } from './component/shared-location/generate-location/generate-location.component';
 
 const routes: Routes = [
   {
@@ -56,6 +58,15 @@ const routes: Routes = [
         path:'add-device-type',component:AddDeviceTypeComponent
       },{
         path:'edit-device-type/:id',component:AddDeviceTypeComponent
+      }
+    ]
+  },
+
+   {
+    path:'shared-location',component:SharedLocationManageComponent,
+    children: [
+      {
+        path:':id/:CustomerId/generate-location',component:GenerateLocationComponent
       }
     ]
   },

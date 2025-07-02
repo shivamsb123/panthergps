@@ -1,0 +1,66 @@
+<div class="card">
+    <div class="card-header">
+       Generate Location
+        <app-close-routes [route]="routePath"></app-close-routes>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="locationForm" (ngSubmit)="submit(locationForm.value)">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Vehicle</label>
+                    <ng-select placeholder="Select Vehicle" formControlName="vehicle">
+                        <ng-option *ngFor="let item of vehicleData" [value]="item?.value">{{ item?.text
+                            }}</ng-option>
+                    </ng-select>
+                    <div *ngIf="locationForm.get('vehicle')?.invalid && (locationForm.get('vehicle')?.dirty || locationForm.get('vehicle')?.touched)"
+                        class="text-danger">
+                        Vehicle is required
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Time Period</label>
+                    <ng-select placeholder="Select Time Period" formControlName="time_period">
+                        <ng-option *ngFor="let item of selecteDate" [value]="item?.value">{{ item?.text
+                            }}</ng-option>
+                    </ng-select>
+                    <div *ngIf="locationForm.get('time_period')?.invalid && (locationForm.get('time_period')?.dirty || locationForm.get('time_period')?.touched)"
+                        class="text-danger">
+                        Time Period is required
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Expiry Date</label>
+                    <div class="input-group mb-3">
+                        <!-- <input type="text" class="form-control"  placeholder="dd/MM/yyyy" formControlName="toDate"
+                    #dp="bsDatepicker" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"/> -->
+                        <mat-form-field class="w-100">
+                            <input matInput [matDatepicker]="pointTo" formControlName="expiry_date">
+                            <mat-datepicker-toggle matSuffix [for]="pointTo"></mat-datepicker-toggle>
+                            <mat-datepicker #pointTo></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="locationForm.get('expiry_date')?.invalid && (locationForm.get('expiry_date')?.dirty || locationForm.get('expiry_date')?.touched)"
+                        class="text-danger">
+                        Expiry Date is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <br>
+                    <button class="btn btn-success" type="submit">
+                        {{button}}
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <br>
+                    <button class="btn btn-danger" (click)="cancel($event)">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

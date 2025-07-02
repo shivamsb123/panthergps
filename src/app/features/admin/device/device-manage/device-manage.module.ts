@@ -35,6 +35,10 @@ import { AdminDeviceFilterComponent } from './component/admin-device-filter/admi
 import { DeviceCommandManageComponent } from './pages/device-command-manage/device-command-manage.component';
 import { DeviceCommandListComponent } from './component/device-command/device-command-list/device-command-list.component';
 import { AddDeviceCommandComponent } from './component/device-command/add-device-command/add-device-command.component';
+import { SharedLocationManageComponent } from './pages/shared-location-manage/shared-location-manage.component';
+import { GenerateLocationComponent } from './component/shared-location/generate-location/generate-location.component';
+import { SharedLocationListComponent } from './component/shared-location/shared-location-list/shared-location-list.component';
+import { SharedLocationFilterComponent } from './component/shared-location/shared-location-filter/shared-location-filter.component';
 
 
 @NgModule({
@@ -70,6 +74,10 @@ import { AddDeviceCommandComponent } from './component/device-command/add-device
     DeviceCommandManageComponent,
     DeviceCommandListComponent,
     AddDeviceCommandComponent,
+    SharedLocationManageComponent,
+    GenerateLocationComponent,
+    SharedLocationListComponent,
+    SharedLocationFilterComponent,
   ],
   imports: [
     CommonModule,

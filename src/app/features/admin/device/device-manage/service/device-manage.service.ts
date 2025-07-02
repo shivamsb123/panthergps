@@ -194,4 +194,25 @@ export class DeviceManageService {
     .get(url)
     .pipe(catchError((error: HttpErrorResponse) => of(error)));
   }
+
+   sharedLocationList(payload:any): Observable<any> {
+    let url = API_CONSTANTS.sharedLocation
+    return this.apiService
+      .postData(url,payload)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+   deleteSharedLocation(payload:any): Observable<any> {
+    let url = API_CONSTANTS.deleteSharedLocation
+    return this.apiService
+      .postData(url,payload)
+      .pipe(catchError((error: HttpErrorResponse) => of(error)));
+  }
+
+generateSharedLocation(payload:any){
+    let url = API_CONSTANTS.generateLocation
+    return this.apiService
+      .postData(url,payload)
+      .pipe(catchError((error: HttpErrorResponse) => of(error))); 
+  }
 }

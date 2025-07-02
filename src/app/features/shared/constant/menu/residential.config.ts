@@ -111,6 +111,12 @@ export const admin = [
         "path": "admin/device/device-command",
         "icon_Url": "MenuLeft.png"
       },
+       {
+        "id": 138,
+        "name": "Shared Location",
+        "path": "admin/device/shared-location",
+        "icon_Url": "MenuLeft.png"
+      },
       // {
       //   "id": 138,
       //   "name": "Device Detail",

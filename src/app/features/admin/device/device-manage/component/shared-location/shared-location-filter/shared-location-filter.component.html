@@ -1,0 +1,36 @@
+<div class="filter-part">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="middle-part">
+                <ng-select placeholder="Select Dealer" [ngModel]="selectedDealer" (change)="onDealerSelect($event)">
+                    <ng-option *ngFor="let item of dealerData" [value]="item?.Id">{{ item?.Name }}</ng-option>
+                  </ng-select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="customer-part">
+                <ng-select placeholder="Select Customer" [ngModel]="selectedCustomer" (change)="onCustomerSelect($event)">
+                    <ng-option *ngFor="let item of customerData" [value]="item?.Id">{{ item?.CustomerName }}</ng-option>
+                  </ng-select>
+            </div>
+        </div>
+
+         <div class="col-md-3">
+            <div class="customer-part">
+                <ng-select placeholder="Select Vehicle" [ngModel]="selectedVehicle"
+                    (change)="onVehicleSelect($event)">
+                    <ng-option *ngFor="let item of vehicleData" [value]="item?.value">{{ item?.text
+                        }}</ng-option>
+                </ng-select>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="first-part">
+                <button class="btn btn-primary" (click)="redirectTo('generate-location')"><i class="fa fa-plus" aria-hidden="true"></i>Generate Location</button>     
+            </div>
+           
+        </div>
+    </div>
+</div>
+

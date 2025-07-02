@@ -140,5 +140,8 @@ export const API_CONSTANTS: any = {
   commandTypeDropdown:'Device/DeviceCommandType',
   addUpdateCommand:'Device/AddUpdateDeviceCommand',
   checkDetail:'UserToken/ValidateUserPassword',
-  bulkModified:'Points/AllocateToDevicebulk'
+  bulkModified:'Points/AllocateToDevicebulk',
+  sharedLocation:'ShareLocation/ShareLocationList',
+  deleteSharedLocation:'ShareLocation/ShareLocationDelete',
+  generateLocation:'ShareLocation/ShareLocationCreate'
 };
